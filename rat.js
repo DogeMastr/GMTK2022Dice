@@ -157,7 +157,7 @@ class PlayerRat extends Sprite {
 
 		this.x = pos[0];
 		this.y = pos[1];
-		this.r = radius;
+		this.r = radius + random.integer(-5, 20);
 
 		this._stuckToMouse = false;
 
