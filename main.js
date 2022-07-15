@@ -3,21 +3,24 @@ function preload() {
 	assets.RAT_LEFT = loadImage("data/michaelLEFT.png");
 	assets.RAT_RIGHT = loadImage("data/michaelRIGHT.png")
 
+	assets.GIANT_RAT_LEFT = loadImage("data/michaelLEFT.png");
+	assets.GIANT_RAT_RIGHT = loadImage("data/michaelRIGHT.png")
 }
 
 
 function setup() {
-	// assets.RAT_LEFT.resize(75, 0);
-	//
-	// assets.RAT_RIGHT.resize(75, 0);
+	assets.GIANT_RAT_LEFT.resize(200, 0);
+	assets.GIANT_RAT_RIGHT.resize(200, 0);
 
 	imageMode(CENTER);
 	createCanvas(window.innerWidth, window.innerHeight);
 	sprites.setLayers(["BACKGROUND", "RAT", "FOREGROUND"]);
 
-	for (let i=0; i<20; i++) {
-		sprites.new(new Rat([400, 300], 35));
-	}
+	sprites.new(new RatParent(4, [400, 300], "2", -1));
+
+	sprites.new(new RatParent(5, [400, 100], "2", 20));
+
+
 }
 
 function draw() {

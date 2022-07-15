@@ -25,3 +25,18 @@ const random = {
 		}
 	}
 }
+
+
+function impactFont (t, pos, stroke, textColour, strokeColour) {
+	strokeColour = strokeColour ?? color(10);
+	fill(strokeColour);
+
+	text(t, pos[0]-stroke, pos[1]-stroke);
+	text(t, pos[0]+stroke, pos[1]-stroke);
+	text(t, pos[0]+stroke, pos[1]+stroke);
+	text(t, pos[0]-stroke, pos[1]+stroke);
+
+	fill(textColour);
+	text(t, pos[0], pos[1]);
+
+}

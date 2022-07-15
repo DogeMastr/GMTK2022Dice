@@ -72,7 +72,20 @@ necromance thing
 
 #### TODO:
 
-- [ ] - RAT NUMERBS (rat dice)
-	- artwork (rachel)
+- [x] - RAT NUMERBS (rat dice)
+	- [ ] - artwork (rachel)
 
-- [ ] -
+- [ ] - Start page main menu (other html page??)
+- [ ] - Pause menu
+
+- [ ] - collision between rat groups
+- [ ] - camera
+- [ ] - rat reproduction
+
+- [ ] - fighting!!!!!
+
+- [ ] - make the rules
+- [ ] - rule ui to choose a rule and show current ones
+- [ ] - 
+
+- [ ] - particles

@@ -1,5 +1,6 @@
 const inputManager = {
 	_keyList: [],
+	_firstFrame: [],
 
 	mouse: {
 		left: false,
@@ -10,6 +11,11 @@ const inputManager = {
 			return [mouseX, mouseY];
 		}
 	},
+
+	keyTapped: function(k) {
+		return this._firstFrame.includes(k);
+	},
+
 
 	keyDown: function(k) {
 		return this._keyList.includes(k);
@@ -48,6 +54,9 @@ function keyTyped() {
 	if (!inputManager._keyList.includes(key)) {
 		inputManager._keyList.push(key);
 	}
+	if (!inputManager._firstFrame.includes(key)) {
+		inputManager._firstFrame.push(key);
+	}
 }
 
 function keyPressed() {
@@ -61,6 +70,14 @@ function keyPressed() {
 
 	if (!inputManager._keyList.includes(keyCode)) {
 		inputManager._keyList.push(keyCode);
+	}
+	if (inputManager._firstFrame.includes(key)) {
+		var i = inputManager._firstFrame.indexOf(key);
+		if (i != -1) {
+			inputManager._firstFrame.splice(i, 1);
+		}
+	} else if (!inputManager._firstFrame.includes(keyCode)) {
+		inputManager._firstFrame.push(keyCode);
 	}
 }
 
@@ -81,5 +98,12 @@ function keyReleased() {
 			inputManager._keyList.splice(i, 1);
 		}
 	}
+	if (inputManager._firstFrame.includes(key)) {
+		var i = inputManager._firstFrame.indexOf(key);
+		if (i != -1) {
+			inputManager._firstFrame.splice(i, 1);
+		}
+	}
+
 	return false;
 }
