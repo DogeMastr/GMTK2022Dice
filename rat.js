@@ -1,61 +1,12 @@
 class RatBase extends Sprite {
 	LAYER = "RAT";
 
-	RAT_SIZE = 35;
-	c = color(155, 35, 35);
-
-	constructor(pos, radius, parent) {
-		super();
-		new super.constructor();
-
-		this.x = pos[0];
-		this.y = pos[1];
-		this.r = radius;
-
-		this.parent = parent
-		this.speed = 4;
-		this.direction = "RIGHT";
-		this.number = random.integer(1, 7);
-	}
-
 	collide(other) {
 		return dist(this.x, this.y, other.x, other.y) < this.r + other.r;
 	}
 
-	update() {
-		let giantRat = this.parent.giantRat;
-
-		let angle = atan2(giantRat.y-this.y, giantRat.x-this.x);
-
-		this.direction = (angle > -HALF_PI && angle < HALF_PI) ? "RIGHT" : "LEFT";
-
-		this.x += cos(angle)*this.speed;
-		this.y += sin(angle)*this.speed;
-
-		for (let rat of this.parent.getRats()) {
-			if (rat === this) continue;
-
-			if (rat.collide(this)) {
-				let pos = rat.pos();
-				let angle = atan2(this.y-pos[1], this.x-pos[0]);
-
-				let d = (this.r + rat.r) - dist(this.x, this.y, rat.x, rat.y);
-
-				this.x += cos(angle) * d * 0.5;
-				this.y += sin(angle) * d * 0.5;
-
-				rat.x += cos(angle) * d * -0.5;
-				rat.y += sin(angle) * d * -0.5;
-			}
-		}
-
-		this.drawRat();
-
-		// drawRAT(this.x, this.y, this.r);
-	}
-
-	drawRat() {
-		let yp = this.y;
+	drawRat(ymod) {
+		let yp = this.y + (ymod ?? 0);
 
 		if (this.direction == "RIGHT") {
 			image(assets.RAT_RIGHT, this.x, yp);
@@ -73,34 +24,9 @@ class RatBase extends Sprite {
 
 		}
 	}
-}
 
-
-class GiantRatThatMakesAllTheRules extends Sprite {
-	LAYER = "RAT";
-
-	RAT_SIZE = 60;
-
-	constructor(pos, parent) {
-		super();
-		new super.constructor();
-
-		this.x = pos[0];
-		this.y = pos[1];
-		this.r = this.RAT_SIZE;
-
-		this.parent = parent
-		this.speed = 4;
-		this.direction = "RIGHT";
-	}
-
-	collide(other) {
-		return dist(this.x, this.y, other.x, other.y) < this.r + other.r;
-	}
-
-
-	update() {
-		for (let rat of this.parent.getRats()) {
+	collideRats(colliders) {
+		for (let rat of colliders) {
 			if (rat === this) continue;
 
 			if (rat.collide(this)) {
@@ -116,6 +42,68 @@ class GiantRatThatMakesAllTheRules extends Sprite {
 				rat.y += sin(angle) * d * -0.5;
 			}
 		}
+
+	}
+}
+
+
+class Rat extends RatBase {
+
+	constructor(pos, radius, parent) {
+		super();
+		new super.constructor();
+
+		this.x = pos[0];
+		this.y = pos[1];
+		this.r = radius;
+
+		this.parent = parent
+		this.speed = 4;
+		this.direction = "RIGHT";
+		this.number = random.integer(1, 7);
+	}
+
+	update() {
+		let giantRat = this.parent.giantRat;
+
+		let angle = atan2(giantRat.y-this.y, giantRat.x-this.x);
+
+		this.direction = (angle > -HALF_PI && angle < HALF_PI) ? "RIGHT" : "LEFT";
+
+		this.x += cos(angle)*this.speed;
+		this.y += sin(angle)*this.speed;
+
+		this.collideRats(this.parent.getRats());
+
+		this.drawRat();
+
+		// drawRAT(this.x, this.y, this.r);
+	}
+}
+
+
+class GiantRatThatMakesAllTheRules extends RatBase {
+
+	constructor(pos, parent) {
+		super();
+		new super.constructor();
+
+		this.x = pos[0];
+		this.y = pos[1];
+		this.r = 60;
+
+		this.parent = parent
+		this.speed = 4;
+		this.direction = "RIGHT";
+	}
+
+	collide(other) {
+		return dist(this.x, this.y, other.x, other.y) < this.r + other.r;
+	}
+
+
+	update() {
+		this.collideRats(this.parent.getRats());
 
 		this.drawRat();
 	}
@@ -139,17 +127,12 @@ class GiantRatThatMakesAllTheRules extends Sprite {
 
 		}
 	}
-
 }
 
 
 
 
-class PlayerRat extends Sprite {
-	LAYER = "RAT";
-
-	RAT_SIZE = 35;
-	c = color(155, 35, 35);
+class PlayerRat extends RatBase {
 
 	constructor(pos, radius, parent) {
 		super();
@@ -240,39 +223,9 @@ class PlayerRat extends Sprite {
 			this.y = mouseY
 		}
 
-		for (let rat of this.parent.getRats()) {
-			if (rat === this) continue;
+		this.collideRats(this.parent.getRats());
 
-			if (this.collide(rat)) {
-				let pos = rat.pos();
-				let angle = atan2(this.y-pos[1], this.x-pos[0]);
-
-
-				let d = (this.r + rat.r) - dist(this.x, this.y, rat.x, rat.y);
-
-				this.x += cos(angle) * d * 0.5;
-				this.y += sin(angle) * d * 0.5;
-
-				rat.x += cos(angle) * d * -0.5;
-				rat.y += sin(angle) * d * -0.5;
-			}
-		}
-
-		let yp = this.y+this._animJump.ymod;
-
-		if (this.direction == "RIGHT") {
-			image(assets.RAT_RIGHT, this.x, yp);
-			textSize(35);
-			impactFont(this.number, [this.x - this.r*0.75, yp], 2, color(255), color(10));
-
-		}
-
-		else {
-			image(assets.RAT_LEFT, this.x, yp);
-			textSize(35);
-			impactFont(this.number, [this.x + this.r*0.4, yp], 2, color(255), color(10));
-
-		}
+		this.drawRat(this._animJump.ymod);
 	}
 }
 
@@ -291,7 +244,7 @@ class RatParent extends Sprite {
 				let newRat = new PlayerRat(pos, 35, this);
 				this._rats.push(newRat);
 			} else {
-				this._rats.push(new RatBase(pos, 35, this));
+				this._rats.push(new Rat(pos, 35, this));
 
 			}
 		}
