@@ -68,3 +68,11 @@ pick up more dice
 grow
 risk style combat?
 necromance thing
+
+
+#### TODO:
+
+- [ ] - RAT NUMERBS (rat dice)
+	- artwork (rachel)
+
+- [ ] -
