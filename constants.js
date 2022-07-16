@@ -1,5 +1,8 @@
-const D_WIDTH = 1920;
-const D_HEIGHT = 1080;
+const D_WIDTH = window.innerWidth;
+const D_HEIGHT = window.innerHeight; // change to 919
+
+// console.log(D_WIDTH);
+// console.log(D_HEIGHT);
 
 
 const genomePlayer = {

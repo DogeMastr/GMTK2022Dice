@@ -1,5 +1,6 @@
 class CircleParticle extends Sprite {
 	LAYER = "HIGHPARTICLE";
+	SQUARE = false;
 
 	constructor(pos, radius, speed, angle, colour, decay) {
 		super();
@@ -21,7 +22,7 @@ class CircleParticle extends Sprite {
 		this.decay = decay ?? 0.5;
 	}
 
-	update() {
+	updateMove() {
 		this.x += this._vel.x;
 		this.y += this._vel.y;
 
@@ -29,9 +30,22 @@ class CircleParticle extends Sprite {
 		if (this.r < 0) {
 			this.destroy = true;
 		}
+	}
+
+	update() {
+		this.updateMove();
 
 		fill(this.c);
-		circle(this.x - camera.x, this.y - camera.y, this.r*2, this.r*2);
+
+		if (this.SQUARE) {
+			rectMode(CENTER);
+			rect(this.x - camera.x, this.y - camera.y, this.r, this.r);
+			rectMode(CORNER);
+		}
+
+		else {
+			circle(this.x - camera.x, this.y - camera.y, this.r*2, this.r*2);
+		}
 	}
 }
 
@@ -66,13 +80,16 @@ function particleExplosion(number, pos, radius, colour, speed) {
 	return new ParticleParent(pos, function() {
 		let arr = [];
 		for (let i=0; i<number; i++) {
-			arr.push(new CircleParticle(
+			let part = new CircleParticle(
 				pos,
 				radius+random.integer(Math.floor(-radius/3), Math.floor(radius/3)),
 				(speed ?? radius/10),
 				Math.random() * TWO_PI,
 				colour,
-			))
+			);
+			part.SQUARE = true;
+			arr.push(part);
+
 		}
 		return arr;
 	});

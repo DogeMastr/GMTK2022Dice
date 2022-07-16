@@ -11,26 +11,30 @@ function preload() {
 	assets.RAT_LEFT = loadImage("data/michaelLEFT.png");
 	assets.RAT_RIGHT = loadImage("data/michaelRIGHT.png");
 
-	assets.GIANT_RAT_LEFT = loadImage("data/michaelLEFT.png");
-	assets.GIANT_RAT_RIGHT = loadImage("data/michaelRIGHT.png");
+	assets.BAD_RAT_LEFT = loadImage("data/fabriceLEFT.png");
+	assets.BAD_RAT_RIGHT = loadImage("data/fabriceRIGHT.png");
+
+	// Gets resized\
+	assets.GIANT_RAT_LEFT = loadImage("data/fabriceLEFT.png");
+	assets.GIANT_RAT_RIGHT = loadImage("data/fabriceRIGHT.png");
 
 	assets.BACKGROUND_GRASS = loadImage("data/grass.png");
-
 	assets.CHEESE_MOUSE_POINTER = loadImage("data/mouseCheese.png");
 }
 
 
 function setup() {
 	noCursor();
+	noStroke();
 	assets.GIANT_RAT_LEFT.resize(200, 0);
 	assets.GIANT_RAT_RIGHT.resize(200, 0);
 
 	imageMode(CENTER);
-	createCanvas(window.innerWidth, window.innerHeight);
-	sprites.setLayers(["MANAGER", "BACKGROUND", "LOWPARTICLE", "RAT", "HIGHPARTICLE", "FOREGROUND", "UI"]);
+	createCanvas(D_WIDTH, D_HEIGHT);
+	sprites.setLayers(["MANAGER", "BACKGROUND", "LOWPARTICLE", "DEADRAT", "RAT", "HIGHPARTICLE", "FOREGROUND", "UI"]);
 
-	sprites.new(new RatParent(10, [400, 500], -1, genomePlayer));
-	sprites.new(new RatParent(5, [400, 100], 20, genomePlayer));
+	sprites.new(new RatParent(30, [400, 500], -1, genomePlayer));
+	sprites.new(new RatParent(5, [400, -400], 20, genomePlayer));
 	frameRate(50);
 
 	const b = assets.BACKGROUND_GRASS.width - 1;
@@ -77,10 +81,10 @@ function draw() {
 	debug.displayText(Math.floor(frameRate()));
 	debug.update();
 
-	debug.displayText(sprites.get("BACKGROUND").length);
+	if (inputManager.keyDown("p") && sprites.get("HIGHPARTICLE").length == 0) {
+		sprites.new(new ClawMarks(inputManager.mouse.pos(), -HALF_PI-QUARTER_PI, color(155, 35, 35)));
 
-	if (inputManager.keyDown("p") ){//&& sprites.get("HIGHPARTICLE").length == 0) {
-		sprites.new(particleExplosion(20, inputManager.mouse.pos(), 20, color(155, 35, 35)));
+		// sprites.new(particleExplosion(20, inputManager.mouse.pos(), 20, color(155, 35, 35)));
 		// fill(255);
 		// circle(mouseX, mouseY, 50, 50);
 	}

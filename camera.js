@@ -3,8 +3,8 @@ const camera = {
 	y: 0,
 	_speed: 20,
 
-	w: window.innerWidth,
-	h: window.innerHeight,
+	w: D_WIDTH,
+	h: D_HEIGHT,
 	margin: this.w / 30,
 
 	update: function() {
@@ -26,6 +26,10 @@ const camera = {
 			return;
 		}
 
+		if (rats.length < 1) {
+			return;
+		}
+
 		this.avgPositionX = (sum(rats.map(r => r.x)) / rats.length);
 		this.avgPositionY = (sum(rats.map(r => r.y)) / rats.length);
 
@@ -33,11 +37,11 @@ const camera = {
 		this._ay = this.avgPositionY - (D_HEIGHT/2);
 
 
-		// this.x = avgPositionX - window.innerWidth/2;
-		// this.y = avgPositionY - window.innerHeight/2;
+		// this.x = avgPositionX - D_WIDTH/2;
+		// this.y = avgPositionY - D_HEIGHT/2;
 
 		let d = dist(this.x, this.y , this._ax, this._ay);
-		// this._speed = map(d, 0, window.innerWidth/2, 0, 20);
+		// this._speed = map(d, 0, D_WIDTH/2, 0, 20);
 
 		// if (d < 10) {
 		// 	this.x = this.avgPositionX;

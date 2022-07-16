@@ -24,15 +24,17 @@
 - [ ] - Start page main menu (other html page??)
 - [ ] - Pause menu
 
-- [ ] - collision between rat groups
+- [x] - collision between rat groups
 - [x] - camera
 - [ ] - rat reproduction
 
-- [ ] - fighting!!!!!
+- [x] - fighting!!!!!
+	- [x] - make better
+	- [ ] - add classes
 
 - [ ] - make the rules
 - [ ] - rule ui to choose a rule and show current ones
-- [ ] -
+- [ ] - 
 
 - [x] - particles
 
