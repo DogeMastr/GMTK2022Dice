@@ -67,3 +67,25 @@ function normalize(val) {
 	if (val < 0) { return -1; }
 	return 0;
 }
+
+
+class Coroutine extends Sprite {
+	LAYER = "MANAGER";
+
+	constructor(frames, callback, args) {
+		super();
+		new super.constructor();
+
+		this._frames = frames;
+		this._callback = callback;
+		this._callback_args = args;
+	}
+
+	update() {
+		this._frames--;
+		if (this._frames < 1) {
+			(this._callback_args) ? this._callback(this._callback_args) : this._callback();
+			this.destroy = true;
+		}
+	}
+}

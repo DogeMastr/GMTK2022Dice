@@ -26,13 +26,17 @@ const camera = {
 			return;
 		}
 
-		this.avgPositionX = (sum(rats.map(r => r.x)) / rats.length) - window.innerWidth/ 2;
-		this.avgPositionY = (sum(rats.map(r => r.y)) / rats.length) - window.innerHeight/2;
+		this.avgPositionX = (sum(rats.map(r => r.x)) / rats.length);
+		this.avgPositionY = (sum(rats.map(r => r.y)) / rats.length);
+
+		this._ax = this.avgPositionX - (D_WIDTH/2);
+		this._ay = this.avgPositionY - (D_HEIGHT/2);
+
 
 		// this.x = avgPositionX - window.innerWidth/2;
 		// this.y = avgPositionY - window.innerHeight/2;
 
-		let d = dist(this.x, this.y , this.avgPositionX, this.avgPositionY);
+		let d = dist(this.x, this.y , this._ax, this._ay);
 		// this._speed = map(d, 0, window.innerWidth/2, 0, 20);
 
 		// if (d < 10) {
@@ -41,7 +45,7 @@ const camera = {
 		// 	return;
 		// }
 
-		let angle = atan2(this.avgPositionY-this.y, this.avgPositionX-this.x);
+		let angle = atan2(this._ay-this.y, this._ax-this.x);
 
 		let df = (d > 5) ? d/20 : 0;
 
