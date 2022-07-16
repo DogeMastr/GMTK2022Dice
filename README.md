@@ -1,42 +1,5 @@
 # ROLL OF THE d i ce !!!
 
-idea:
-Rouge like about dice
-Throw dice at people
-morbius strip dice
-Egypt dice
-
-different types of dice
-
-keeping dice and re rolling others
-
-game design jam
-
-you are the dice
-
-you are on the dice
-
-fight other dice
-
-evil dice
-
-other irl randomizers:
-coin
-spin the wheel
-rolling cylinder thing
-
-DICE RATS
-
-BETTING!!!!!
-bet on dice racing
-
-dice powers
-
-endless runner dice
-endless rolling!!!!
-
-bloxorz dice get the right number on top to use as combat number
-
 #### BIG IDEA WOWOWOWO!!!!!
 - [x] - you (dice) are on a grid
 - [x] - dice are also on a grid
@@ -53,23 +16,6 @@ bloxorz dice get the right number on top to use as combat number
 - [ ] - items on the ground
 - [ ] - you roll onto the items and they change what face that is
 
-
-wheel idea:
-wheel in the center of the screen
-it is forever spinning
-space bar to slow down / stop
-gremlins drop segments
-
-
-
-katimari idea:
-you are dice
-pick up more dice
-grow
-risk style combat?
-necromance thing
-
-
 #### TODO:
 
 - [x] - RAT NUMERBS (rat dice)
@@ -79,13 +25,36 @@ necromance thing
 - [ ] - Pause menu
 
 - [ ] - collision between rat groups
-- [ ] - camera
+- [x] - camera
 - [ ] - rat reproduction
 
 - [ ] - fighting!!!!!
 
 - [ ] - make the rules
 - [ ] - rule ui to choose a rule and show current ones
-- [ ] - 
+- [ ] -
 
-- [ ] - particles
+- [x] - particles
+
+#### LIST OF RULES:
+im the giant rat that makes all of the rules
+
+kinda layout of the rule
+[NUMBER] rats are now [ATTRUBUTE]
+
+Attributes:
+	Fire rat - aoe damage or something + double damage vs ice rats
+	Ice rat - slippery - moves fast / can dodge attacks?
+	Poison rat - on death it subtracts its number to the rat that killed it (weakening!!)
+	Recruitment rat - Makes rats that it beats join their team
+	Clone rat - makes two [1] rats when it dies
+
+
+Levels:
+
+	HP: 1
+	DMG: 1
+	DODGE%: 15
+	ATK Cooldown:
+
+	- [1] rats have +20% DODGE

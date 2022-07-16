@@ -7,8 +7,16 @@ const inputManager = {
 		right: false,
 		middle: false,
 
+		x: function() {
+			return mouseX + camera.x;
+		},
+
+		y: function() {
+			return mouseY + camera.y;
+		},
+
 		pos: function() {
-			return [mouseX, mouseY];
+			return [this.x(), this.y()];
 		}
 	},
 

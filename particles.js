@@ -31,7 +31,7 @@ class CircleParticle extends Sprite {
 		}
 
 		fill(this.c);
-		circle(this.x, this.y, this.r*2, this.r*2);
+		circle(this.x - camera.x, this.y - camera.y, this.r*2, this.r*2);
 	}
 }
 
@@ -62,19 +62,35 @@ class ParticleParent extends Sprite {
 }
 
 
-function particleExplosion(number, pos, radius, colour) {
+function particleExplosion(number, pos, radius, colour, speed) {
 	return new ParticleParent(pos, function() {
 		let arr = [];
 		for (let i=0; i<number; i++) {
 			arr.push(new CircleParticle(
 				pos,
 				radius+random.integer(Math.floor(-radius/3), Math.floor(radius/3)),
-				radius/10,
+				(speed ?? radius/10),
 				Math.random() * TWO_PI,
 				colour,
 			))
 		}
-		console.log(arr);
+		return arr;
+	});
+}
+
+
+function riseParticles(number, range, radius, colour) {
+	return new ParticleParent(range[0], function() {
+		let arr = [];
+		for (let i=0; i<number; i++) {
+			arr.push(new CircleParticle(
+				[random.integer(range[0][0], range[1][0]), random.integer(range[0][1], range[1][1])],
+				(speed ?? radius)+random.integer(Math.floor(-radius/3), Math.floor(radius/3)),
+				radius/10,
+				-HALF_PI,
+				colour,
+			))
+		}
 		return arr;
 	});
 }

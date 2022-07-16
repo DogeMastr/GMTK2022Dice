@@ -40,3 +40,30 @@ function impactFont (t, pos, stroke, textColour, strokeColour) {
 	text(t, pos[0], pos[1]);
 
 }
+
+
+function sum(iter) {
+let count = 0;
+	for (let s of iter) {
+		count += s;
+	}
+	return count;
+}
+
+
+function any(iter, cond) {
+	for (let i of iter) {
+		if (cond(i)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+function normalize(val) {
+	if (val > 0) { return 1; }
+	if (val < 0) { return -1; }
+	return 0;
+}
