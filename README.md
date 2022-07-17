@@ -32,7 +32,7 @@
 	- [x] - make better
 	- [?] - add classes
 
-- [ ] - make the rules
+- [x] - make the rules
 - [ ] - rule ui to choose a rule and show current ones
 - [ ] - spawning other rats
 

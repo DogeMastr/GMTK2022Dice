@@ -29,14 +29,18 @@ class Ruleset { // One for each RatParent
 	}
 
 	newRule(rule) {
+		if (!rule) {
+			return;
+		}
+
 		for (let rule of this.conditionRules("newRule")) {
 			for (let rat of this.parent.getRats(rule.number)) {
 				rule.execute(rat);
 			}
 		}
 
-		if (!rule) {
-			return;
+		if (this.parent.identifier == -1) {
+			sprites.new(new TextParticle([camera.x+820, camera.y+90], "NEW RULE", 40, 255))
 		}
 
 		// some kinda js object gets pushed
@@ -63,7 +67,7 @@ const basicRules = {
 	duplicate: {
 		number: 1,
 		type: "duplicate",
-		description: "All rats with number [1] have a chance to duplicate when a new rule is acquired",
+		description: "All rats with number [1] duplicate when a new rule is acquired",
 		condition: "newRule",
 		execute: function(rat) {
 			rat.parent.newRat(new PlayerRat(rat.pos(), 35, rat.parent).setNumber(rat.number));
@@ -75,15 +79,34 @@ const basicRules = {
 function generateDynamicRule() {
 	let number = random.integer(1, 7);
 	let stat = random.choice(["hp", "dmg", "dodge", "cooldown"]);
-	let bonus = random.integer(1, 3);
+
+	let bonus = (stat == "hp" || stat == "dmg") ? random.integer(1, 3) : random.integer(5, 15);
+	if (stat == "cooldown") {
+		bonus *= -1;
+	}
 
 	return {
 		number: number,
-		type: random.choice([""]),
-		description: `All rats with number [${number}] gain +${bonus} to ${stat}`,
+		type: stat + "Buff",
+		description: `All rats with number [${number}] gain ${bonus} to ${stat}`,
 		condition: "onCalculate",
 		execute: function(rat) {
 			rat.stats[stat] += bonus;
+		}
+	};
+}
+
+
+function dodgeBuffOverTime() {
+	let number = random.integer(1, 7);
+
+	return {
+		number: number,
+		type: "dodgeBuff",
+		description: `All rats with number [${number}] gain +2 to dodge when a new rule is acquired`,
+		condition: "newRule",
+		execute: function(rat) {
+			rat.stats.dodge += 2;
 		}
 	};
 }

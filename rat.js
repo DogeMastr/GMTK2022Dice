@@ -36,10 +36,6 @@ class RatBase extends Sprite {
 			return;
 		}
 
-		if (this.stats.dmg < 1) {
-			console.log(this);
-		}
-
 		target.receiveAttack(this, this.stats.dmg);
 		this.stats._cooling_down = this.stats.cooldown;
 		sprites.new(new ClawMarks(
@@ -176,15 +172,16 @@ class Rat extends RatBase {
 
 	update() {
 		let giantRat = this.parent.giantRat;
+		if (this.a == null) {
+			this.a = giantRat.a;
+			this.changeAngle(this.a);
+		}
 
 		this.direction = (this._move.x > 0) ? "RIGHT" : "LEFT";
 
 		if (this.parent.giantRat.battleStatus.underAttack) {
-			let pos = [
-				camera.avgPositionX,
-				camera.avgPositionY,
-			];
-
+			const attacker = giantRat.battleStatus.attacker;
+			let pos = (attacker.parent.identifier == -1) ? [camera.avgPositionX, camera.avgPositionY] : attacker.parent.giantRat.pos();
 			let a = atan2(pos[1]-this.y, pos[0]-this.x)
 
 			this.changeAngle(a);
@@ -217,17 +214,19 @@ class GiantRatThatMakesAllTheRules extends RatBase {
 		this.speed = 3;
 		this.direction = "RIGHT";
 
-		this.angle = 0;
+		this.angle = Math.random()*TWO_PI;
 		this.changeAngle(this.angle);
 
 		this.battleStatus = {
 			underAttack: false,
 			giantRat: this,
+			attacker: null,
 
 			ratAttacked: function(rat, attacker) {
 				if (this.underAttack) {return;}
 				this.underAttack = true;
-				console.log(this.giantRat.posRel());
+				this.attacker = attacker;
+
 				sprites.new(new TextParticle(this.giantRat.pos(), "!!", 45, color(195, 35, 35)))
 			}
 		};
@@ -248,11 +247,7 @@ class GiantRatThatMakesAllTheRules extends RatBase {
 		this.y += this.move.y;
 
 		if (this.battleStatus.underAttack) {
-			let pos = [
-				camera.avgPositionX,
-				camera.avgPositionY
-			]
-
+			let pos = (this.battleStatus.attacker.parent.identifier == -1) ? [camera.avgPositionX, camera.avgPositionY] : this.battleStatus.attacker.parent.giantRat.pos();
 			let a = atan2(pos[1]-this.y, pos[0]-this.x);
 			this.changeAngle(a);
 		}
@@ -272,6 +267,14 @@ class GiantRatThatMakesAllTheRules extends RatBase {
 
 		sprites.new(new DeadRat(this, (this.direction == "RIGHT") ? assets.GIANT_RAT_RIGHT : assets.GIANT_RAT_LEFT));
 
+		this.parent.getRats().forEach((item, i) => {
+			item.death();
+		});
+
+		if (this.battleStatus.attacker.parent.identifier == -1) {
+			sprites.get("RAT")[0].rules.newRule(this.parent.rules.rules[0]);
+		}
+
 		// spawnRule
 	}
 }
@@ -282,7 +285,7 @@ class RoamingRat extends RatBase {
 	_ROAMING = true;
 	LAYER = "ROAMINGRAT";
 
-	constructor(pos, radius) {
+	constructor(pos, radius, angle) {
 		super();
 		new super.constructor();
 
@@ -290,19 +293,27 @@ class RoamingRat extends RatBase {
 		this.y = pos[1];
 		this.r = radius + random.integer(0, 20);
 		this._visualR = radius;
-		this.a = 0;
-		this.changeAngle(this.a);
+
+		this.a = angle;
+		this.speed = 2
+
+		this._move = {
+			x: cos(this._a)*this.speed,
+			y: sin(this._a)*this.speed,
+		}
 
 		this.number = random.integer(1, 3);
 	}
 
-
 	update() {
-		console.log(this);
+		if (Math.abs(this.giantRat.x - camera.x) > D_WIDTH*2 || Math.abs(this.giantRat.y - camera.y) > D_HEIGHT*2) {
+			this.kill();
+		}
+
 		this.x += this._move.x;
 		this.y += this._move.y;
 
-		this.direction = (this.move.x > 0) ? "RIGHT" : "LEFT";
+		this.direction = (this._move.x > 0) ? "RIGHT" : "LEFT";
 
 		this.collideRats();
 		this.drawRat(0, assets.NEUTRAL_RAT_LEFT, assets.NEUTRAL_RAT_RIGHT);
@@ -326,7 +337,7 @@ class PlayerRat extends RatBase {
 		this._stuckToMouse = false;
 
 		this.parent = parent
-		this.speed = 4;
+		this.speed = 11;
 		this.direction = "RIGHT";
 		this.number = random.integer(1, 7);
 
@@ -347,7 +358,6 @@ class PlayerRat extends RatBase {
 		}
 
 		this.resolveStats();
-		console.log(this.stats);
 	}
 
 	rollNumber() {
@@ -420,10 +430,6 @@ class PlayerRat extends RatBase {
 		this.collideRats();
 		this.drawRat(this._animJump.ymod, assets.RAT_LEFT, assets.RAT_RIGHT);
 	}
-
-	runRule(){
-
-	}
 }
 
 
@@ -432,6 +438,8 @@ class RatParent extends Sprite {
 	LAYER = "RAT";
 
 	constructor(number, pos, identifier, genome) {
+		console.log(number);
+
 		super();
 		new super.constructor();
 
@@ -463,6 +471,10 @@ class RatParent extends Sprite {
 			this.rules.newRule(basicRules.duplicate);
 		}
 
+		else {
+			this.rules.newRule([generateDynamicRule, dodgeBuffOverTime][random.integer(0, 2)]());
+		}
+
 	}
 
 	newRat(rat) {
@@ -470,12 +482,12 @@ class RatParent extends Sprite {
 	}
 
 	update() {
-		if (this.identifier != -1) {
-			if (Math.abs(this.giantRat.x - camera.x) > D_WIDTH*2 || Math.abs(this.giantRat.y - camera.y) > D_HEIGHT*2) {
-				this.onScreenNow = false
-				return;
-			}
-		}
+		// if (this.identifier != -1) {
+		// 	if (Math.abs(this.giantRat.x - camera.x) > D_WIDTH*2 || Math.abs(this.giantRat.y - camera.y) > D_HEIGHT*2) {
+		// 		this.onScreenNow = false
+		// 		return;
+		// 	}
+		// }
 
 		this.onScreenNow = true;
 

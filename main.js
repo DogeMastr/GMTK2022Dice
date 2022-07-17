@@ -18,8 +18,12 @@ function preload() {
 	assets.GIANT_RAT_LEFT = loadImage("data/fabriceLEFT.png");
 	assets.GIANT_RAT_RIGHT = loadImage("data/fabriceRIGHT.png");
 
+	assets.NEUTRAL_RAT_LEFT = loadImage("data/robertLEFT.png");
+	assets.NEUTRAL_RAT_RIGHT = loadImage("data/robertRIGHT.png");
+
 	assets.BACKGROUND_GRASS = loadImage("data/grass.png");
 	assets.CHEESE_MOUSE_POINTER = loadImage("data/mouseCheese.png");
+	// assets.RULE_SCROLL = loadImage("data/rule_scroll.png");
 }
 
 
@@ -33,9 +37,9 @@ function setup() {
 	createCanvas(D_WIDTH, D_HEIGHT);
 	sprites.setLayers(["MANAGER", "BACKGROUND", "LOWPARTICLE", "DEADRAT", "RAT", "ROAMINGRAT", "HIGHPARTICLE", "FOREGROUND", "UI"]);
 
-	sprites.new(new RatParent(20, [400, 500], -1, genomePlayer));
-	sprites.new(new RatParent(14, [400, -400], 20, genomePlayer));
-	sprites.new(new RoamingRat([100, 500], 35));
+	sprites.new(new RatParent(14, [400, 500], -1, genomePlayer));
+	// sprites.new(new RatParent(27, [400, -400], 20, genomePlayer));
+	// sprites.new(new RoamingRat([100, 500], 35));
 
 	frameRate(50);
 
@@ -72,6 +76,32 @@ function setup() {
 			imageMode(CORNER);
 			image(assets.CHEESE_MOUSE_POINTER, this.x, this.y);
 		}
+	});
+
+	sprites.new({
+		LAYER: "MANAGER",
+
+		update: function() {
+			debug.displayText(sprites.get("RAT").length);
+
+			if (sprites.get("RAT").length < 10) {
+				let identifier = 0;
+				for (let ratP of sprites.get("RAT")) {
+					if (ratP.identifier > identifier) {
+						identifier = ratP.identifier+1;
+					}
+				}
+
+				let playerRats = sprites.get("RAT")[0];
+				let pos = [
+					camera.avgPositionX + random.choice([-1, 1])*D_WIDTH*random.integer(1, 2),
+					camera.avgPositionY + random.choice([-1, 1])*D_HEIGHT*random.integer(1, 2),
+				];
+
+				sprites.new(new RatParent(playerRats.getRats().length + random.integer(-7, 2), pos, identifier, genomePlayer));
+			}
+		}
+
 	});
 }
 
