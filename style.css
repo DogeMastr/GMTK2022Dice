@@ -1,0 +1,27 @@
+body {
+	font-family: "Lucida Console", Courier, monospace;
+	background-image: url("data/grass.png");
+	/* background-size: cover; */
+	padding: 3%;
+	color: white;
+}
+
+img {
+	width: 40%;
+	height: auto;
+}
+
+.titleCard {
+	position: absolute;
+	text-align: center;
+}
+
+.leftInfo {
+	position: absolute;
+	text-align: left
+}
+
+.rightInfo {
+	position: absolute;
+	text-align: right;
+}

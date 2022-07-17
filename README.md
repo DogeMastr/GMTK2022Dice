@@ -19,7 +19,7 @@
 #### TODO:
 
 - [x] - RAT NUMERBS (rat dice)
-	- [ ] - artwork (rachel)
+	- [x] - artwork (rachel)
 
 - [ ] - Start page main menu (other html page??)
 - [ ] - Pause menu
@@ -30,11 +30,11 @@
 
 - [x] - fighting!!!!!
 	- [x] - make better
-	- [ ] - add classes
+	- [?] - add classes
 
 - [ ] - make the rules
 - [ ] - rule ui to choose a rule and show current ones
-- [ ] - 
+- [ ] - spawning other rats
 
 - [x] - particles
 

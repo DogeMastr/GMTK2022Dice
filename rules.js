@@ -40,8 +40,12 @@ class Ruleset { // One for each RatParent
 		}
 
 		// some kinda js object gets pushed
-		rule.description = rule.description.replaceAll("<n>", `[${rule.number}]`)
+		// rule.description = rule.description.replaceAll("<n>", `[${rule.number}]`)
 		this.rules.push(rule);
+
+		for (let rat of this.parent.getRats()) {
+			rat.resolveStats();
+		}
 	}
 
 }
@@ -59,10 +63,27 @@ const basicRules = {
 	duplicate: {
 		number: 1,
 		type: "duplicate",
-		description: "All rats with number <n> have a chance to duplicate when a new rule is acquired",
+		description: "All rats with number [1] have a chance to duplicate when a new rule is acquired",
 		condition: "newRule",
 		execute: function(rat) {
 			rat.parent.newRat(new PlayerRat(rat.pos(), 35, rat.parent).setNumber(rat.number));
 		}
-	}
+	},
+}
+
+
+function generateDynamicRule() {
+	let number = random.integer(1, 7);
+	let stat = random.choice(["hp", "dmg", "dodge", "cooldown"]);
+	let bonus = random.integer(1, 3);
+
+	return {
+		number: number,
+		type: random.choice([""]),
+		description: `All rats with number [${number}] gain +${bonus} to ${stat}`,
+		condition: "onCalculate",
+		execute: function(rat) {
+			rat.stats[stat] += bonus;
+		}
+	};
 }
