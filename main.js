@@ -83,15 +83,19 @@ function draw() {
 
 	if (inputManager.keyDown("p") && sprites.get("HIGHPARTICLE").length == 0) {
 		// sprites.new(new ClawMarks(inputManager.mouse.pos(), -HALF_PI-QUARTER_PI, color(155, 35, 35)));
-
 		sprites.new(new TextParticle(inputManager.mouse.pos(), "DODGE", 15, 255))
-
-
 		// sprites.new(particleExplosion(20, inputManager.mouse.pos(), 20, color(155, 35, 35)));
 		// fill(255);
 		// circle(mouseX, mouseY, 50, 50);
+
+		sprites.get("RAT")[0].rules.newRule();
 	}
 
 	gameState.FRAMES += 1;
 
 }
+
+
+window.onresize = function() {
+	resizeCanvas(window.innerWidth, window.innerHeight);
+};

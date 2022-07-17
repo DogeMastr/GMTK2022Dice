@@ -1,7 +1,8 @@
 class Ruleset { // One for each RatParent
 
-	constructor() {
+	constructor(parent) {
 		// list of rules that are applied
+		this.parent = parent;
 		this.rules = [];
 	}
 
@@ -10,14 +11,34 @@ class Ruleset { // One for each RatParent
 		let arr = [];
 		for (let rule of this.rules) {
 			if (rule.number == n || rule.number == "ANY") {
-				arr.push(rule.type);
+				arr.push(rule);
 			}
 		}
 		return arr;
 
 	}
 
+	conditionRules(cond) {
+		let arr = [];
+		for (let rule of this.rules) {
+			if (rule.condition == cond) {
+				arr.push(rule);
+			}
+		}
+		return arr;
+	}
+
 	newRule(rule) {
+		for (let rule of this.conditionRules("newRule")) {
+			for (let rat of this.parent.getRats(rule.number)) {
+				rule.execute(rat);
+			}
+		}
+
+		if (!rule) {
+			return;
+		}
+
 		// some kinda js object gets pushed
 		rule.description = rule.description.replaceAll("<n>", `[${rule.number}]`)
 		this.rules.push(rule);
@@ -26,13 +47,22 @@ class Ruleset { // One for each RatParent
 }
 
 
-// Example ruleset
-function() {
-	const rules = Ruleset();
+// // Example ruleset
+// function() {
+// 	const rules = Ruleset();
+//
+// 	rules.newRule()
+// }
 
-	rules.newRule({
+
+const basicRules = {
+	duplicate: {
 		number: 1,
 		type: "duplicate",
-		description: "All rats with number <n> have a chance to duplicate when a new rule is acquired"
-	})
+		description: "All rats with number <n> have a chance to duplicate when a new rule is acquired",
+		condition: "newRule",
+		execute: function(rat) {
+			rat.parent.newRat(new PlayerRat(rat.pos(), 35, rat.parent).setNumber(rat.number));
+		}
+	}
 }

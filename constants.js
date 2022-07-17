@@ -11,20 +11,61 @@ const genomePlayer = {
 		dmg: 1,
 		dodge: 15,
 		cooldown: 60,
-
 	},
 
-	_null: {
-		hp: 1,
+	2: {
+		hp: 12,
 		dmg: 1,
 		dodge: 15,
 		cooldown: 60,
 	},
 
-	resolve: function(n) {
-		n = (n > 1) ? 1 : n;
-
-		return this[n ?? "_null"];
+	3: {
+		hp: 8,
+		dmg: 2,
+		dodge: 15,
+		cooldown: 60,
 	},
 
+	4: {
+		hp: 4,
+		dmg: 3,
+		dodge: 15,
+		cooldown: 60,
+	},
+
+	5: {
+		hp: 2,
+		dmg: 4,
+		dodge: 25,
+		cooldown: 75,
+	},
+
+	6: {
+		hp: 1,
+		dmg: 6,
+		dodge: 15,
+		cooldown: 50,
+	},
+
+	resolve: function(n) {
+		let b = this[n];
+
+		let newObj = {};
+		for (let key in b) {
+			newObj[key] = b[key];
+		}
+
+		return newObj;
+	},
+}
+
+
+function giantRatStats() {
+	return {
+		hp: 15,
+		dmg: 3,
+		dodge: 1,
+		cooldown: 90,
+	}
 }

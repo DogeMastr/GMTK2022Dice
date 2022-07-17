@@ -1,6 +1,11 @@
 class RatBase extends Sprite {
 	LAYER = "RAT";
 
+	setNumber(n) {
+		this.number = n;
+		return this;
+	}
+
 	collide(other) {
 		if (this._stuckToMouse || other._stuckToMouse) {
 			return false;
@@ -18,6 +23,10 @@ class RatBase extends Sprite {
 		if (this.stats._cooling_down != null) {
 			this.stats._cooling_down = (this.stats._cooling_down > 0) ? this.stats._cooling_down-1 : null;
 			return;
+		}
+
+		if (this.stats.dmg < 1) {
+			console.log(this);
 		}
 
 		target.receiveAttack(this, this.stats.dmg);
@@ -44,10 +53,11 @@ class RatBase extends Sprite {
 		}
 
 		if (random.integer(0, 101) < this.stats.dodge) {
-			sprites.new(new TextParticle(inputManager.mouse.pos(), "DODGE", 15, 255))
+			sprites.new(new TextParticle(this.pos(), "DODGE", 15, 255));
 			return; //dodged
 		}
 
+		sprites.new(new TextParticle(this.pos(), dmg, 25, color(255,0,0)));
 		this.dealDamage(dmg);
 	}
 
@@ -197,8 +207,6 @@ class GiantRatThatMakesAllTheRules extends RatBase {
 
 		this.angle = 0;
 		this.changeAngle(this.angle);
-		this.resolveStats();
-		this.stats.hp += 4;
 
 		this.battleStatus = {
 			underAttack: false,
@@ -211,6 +219,7 @@ class GiantRatThatMakesAllTheRules extends RatBase {
 				sprites.new(new TextParticle(this.giantRat.pos(), "!!", 45, color(195, 35, 35)))
 			}
 		};
+		this.stats = giantRatStats();
 	}
 
 	changeAngle(a) {
@@ -311,6 +320,7 @@ class PlayerRat extends RatBase {
 		}
 
 		this.resolveStats();
+		console.log(this.stats);
 	}
 
 	rollNumber() {
@@ -381,8 +391,11 @@ class PlayerRat extends RatBase {
 		}
 
 		this.collideRats();
-
 		this.drawRat(this._animJump.ymod);
+	}
+
+	runRule(){
+
 	}
 }
 
@@ -395,11 +408,16 @@ class RatParent extends Sprite {
 		super();
 		new super.constructor();
 
+		this.rules = new Ruleset(this);
 		this.identifier = identifier;
 		this.genome = genome;
 
 		if (identifier != -1) {
 			this.giantRat = new GiantRatThatMakesAllTheRules(pos, this);
+		}
+
+		else {
+			this.rules.newRule(basicRules.duplicate);
 		}
 
 		this._rats = [];
@@ -418,6 +436,10 @@ class RatParent extends Sprite {
 			this._rats.push(newRat);
 
 		}
+	}
+
+	newRat(rat) {
+		this._rats.push(rat);
 	}
 
 	update() {
@@ -444,7 +466,18 @@ class RatParent extends Sprite {
 
 	}
 
-	getRats() {
-		return this._rats;
+	getRats(n) {
+		if (!n || n < 1 || n > 6) {
+			return this._rats;
+		}
+
+		let arr = [];
+		for (let rat of this._rats) {
+			if (rat.number == n) {
+				arr.push(rat);
+			}
+		}
+		return arr;
+
 	}
 }
