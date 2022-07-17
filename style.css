@@ -7,21 +7,53 @@ body {
 }
 
 img {
-	width: 40%;
 	height: auto;
+	width: 80%;
 }
 
-.titleCard {
-	position: absolute;
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  padding: 10px;
+}
+.left, .right {
+  width: 25%;
+}
+
+.middle {
+  width: 50%;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.myButton {
 	text-align: center;
+	box-shadow: 2px 5px 7px -1px #3dc21b;
+	background:linear-gradient(to bottom, #44c767 5%, #5cbf2a 100%);
+	background-color:#44c767;
+	border-radius:19px;
+	border:3px solid #18ab29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:19px;
+	font-weight:bold;
+	padding:14px 19px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #000000;
 }
-
-.leftInfo {
-	position: absolute;
-	text-align: left
+.myButton:hover {
+	background:linear-gradient(to bottom, #5cbf2a 5%, #44c767 100%);
+	background-color:#5cbf2a;
 }
-
-.rightInfo {
-	position: absolute;
-	text-align: right;
+.myButton:active {
+	position:relative;
+	top:1px;
 }

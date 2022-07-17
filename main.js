@@ -82,7 +82,6 @@ function setup() {
 		LAYER: "MANAGER",
 
 		update: function() {
-			debug.displayText(sprites.get("RAT").length);
 
 			if (sprites.get("RAT").length < 10) {
 				let identifier = 0;

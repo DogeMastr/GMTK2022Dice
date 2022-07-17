@@ -231,6 +231,14 @@ class GiantRatThatMakesAllTheRules extends RatBase {
 			}
 		};
 		this.stats = giantRatStats();
+		if(!this.stats.dmg){
+			this.stats = {
+				hp: 15,
+				dmg: 3,
+				dodge: 1,
+				cooldown: 90
+			}
+		}
 	}
 
 	changeAngle(a) {
