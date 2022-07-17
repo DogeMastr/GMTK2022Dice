@@ -28,6 +28,12 @@ class RatBase extends Sprite {
 		for (let rule of this.parent.rules.conditionRules("onCalculate")) {
 			rule.execute(this);
 		}
+
+		if (!this.stats.hp) {
+			console.log(this.stats);
+			console.log(this);
+		}
+
 	}
 
 	attack(target) {
@@ -275,10 +281,6 @@ class GiantRatThatMakesAllTheRules extends RatBase {
 
 		sprites.new(new DeadRat(this, (this.direction == "RIGHT") ? assets.GIANT_RAT_RIGHT : assets.GIANT_RAT_LEFT));
 
-		this.parent.getRats().forEach((item, i) => {
-			item.death();
-		});
-
 		if (this.battleStatus.attacker.parent.identifier == -1) {
 			sprites.get("RAT")[0].rules.newRule(this.parent.rules.rules[0]);
 		}
@@ -446,8 +448,6 @@ class RatParent extends Sprite {
 	LAYER = "RAT";
 
 	constructor(number, pos, identifier, genome) {
-		console.log(number);
-
 		super();
 		new super.constructor();
 

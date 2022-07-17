@@ -43,6 +43,10 @@ class Ruleset { // One for each RatParent
 			sprites.new(new TextParticle([camera.x+820, camera.y+90], "NEW RULE", 40, 255))
 		}
 
+		else {
+			return;
+		}
+
 		// some kinda js object gets pushed
 		// rule.description = rule.description.replaceAll("<n>", `[${rule.number}]`)
 		this.rules.push(rule);
@@ -70,6 +74,8 @@ const basicRules = {
 		description: "All rats with number [1] duplicate when a new rule is acquired",
 		condition: "newRule",
 		execute: function(rat) {
+			if (rat.parent.identifier != -1) {return;}
+
 			rat.parent.newRat(new PlayerRat(rat.pos(), 35, rat.parent).setNumber(rat.number));
 		}
 	},
@@ -91,6 +97,8 @@ function generateDynamicRule() {
 		description: `All rats with number [${number}] gain ${bonus} to ${stat}`,
 		condition: "onCalculate",
 		execute: function(rat) {
+			if (rat.parent.identifier != -1) {return;}
+
 			rat.stats[stat] += bonus;
 		}
 	};
@@ -106,6 +114,8 @@ function dodgeBuffOverTime() {
 		description: `All rats with number [${number}] gain +2 to dodge when a new rule is acquired`,
 		condition: "newRule",
 		execute: function(rat) {
+			if (rat.parent.identifier != -1) {return;}
+
 			rat.stats.dodge += 2;
 		}
 	};
