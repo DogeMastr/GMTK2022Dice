@@ -34,7 +34,7 @@ function setup() {
 	sprites.setLayers(["MANAGER", "BACKGROUND", "LOWPARTICLE", "DEADRAT", "RAT", "HIGHPARTICLE", "FOREGROUND", "UI"]);
 
 	sprites.new(new RatParent(20, [400, 500], -1, genomePlayer));
-	sprites.new(new RatParent(20, [400, -400], 20, genomePlayer));
+	sprites.new(new RatParent(14, [400, -400], 20, genomePlayer));
 	frameRate(50);
 
 	const b = assets.BACKGROUND_GRASS.width - 1;
@@ -82,7 +82,10 @@ function draw() {
 	debug.update();
 
 	if (inputManager.keyDown("p") && sprites.get("HIGHPARTICLE").length == 0) {
-		sprites.new(new ClawMarks(inputManager.mouse.pos(), -HALF_PI-QUARTER_PI, color(155, 35, 35)));
+		// sprites.new(new ClawMarks(inputManager.mouse.pos(), -HALF_PI-QUARTER_PI, color(155, 35, 35)));
+
+		sprites.new(new TextParticle(inputManager.mouse.pos(), "DODGE", 15, 255))
+
 
 		// sprites.new(particleExplosion(20, inputManager.mouse.pos(), 20, color(155, 35, 35)));
 		// fill(255);

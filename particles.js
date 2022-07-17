@@ -50,6 +50,39 @@ class CircleParticle extends Sprite {
 }
 
 
+class TextParticle extends Sprite {
+	LAYER = "HIGHPARTICLE";
+
+	constructor(pos, text, textSize, colour, lifetime) {
+		super();
+		new super.constructor();
+
+		this.x = pos[0];
+		this.y = pos[1];
+
+		this._text = text;
+		this._textSize = textSize;
+		this.c = colour;
+
+		this._lifetime = (lifetime ?? 30);
+	}
+
+	update() {
+		this.y -= this._textSize/10;
+		this._lifetime--;
+		if (this._lifetime < 0) {
+			this.kill();
+		}
+
+		textSize(this._textSize);
+		textAlign(CENTER);
+		impactFont(this._text, [this.x-camera.x, this.y-camera.y], this._textSize/15, this.c, 10);
+		textAlign(CORNER);
+	}
+
+}
+
+
 class ParticleParent extends Sprite {
 	LAYER = "HIGHPARTICLE";
 

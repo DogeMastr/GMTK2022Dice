@@ -8,6 +8,10 @@ class Sprite {
 		return [this.x, this.y]
 	}
 
+	posRel() {
+		return [this.x-camera.x, this.y-camera.y]
+	}
+
 	kill() {
 		this.destroy = true;
 	}

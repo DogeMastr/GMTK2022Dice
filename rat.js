@@ -44,6 +44,7 @@ class RatBase extends Sprite {
 		}
 
 		if (random.integer(0, 101) < this.stats.dodge) {
+			sprites.new(new TextParticle(inputManager.mouse.pos(), "DODGE", 15, 255))
 			return; //dodged
 		}
 
@@ -165,8 +166,6 @@ class Rat extends RatBase {
 			let a = atan2(pos[1]-this.y, pos[0]-this.x)
 
 			this.changeAngle(a);
-			console.log(degrees(a));
-
 		}
 
 		this.x += this._move.x;
@@ -203,10 +202,13 @@ class GiantRatThatMakesAllTheRules extends RatBase {
 
 		this.battleStatus = {
 			underAttack: false,
+			giantRat: this,
 
 			ratAttacked: function(rat, attacker) {
 				if (this.underAttack) {return;}
 				this.underAttack = true;
+				console.log(this.giantRat.posRel());
+				sprites.new(new TextParticle(this.giantRat.pos(), "!!", 45, color(195, 35, 35)))
 			}
 		};
 	}
@@ -232,11 +234,9 @@ class GiantRatThatMakesAllTheRules extends RatBase {
 
 			let a = atan2(pos[1]-this.y, pos[0]-this.x);
 			this.changeAngle(a);
-
-			console.log(degrees(a));
 		}
 
-		debug.displayText(`attack: ${this.battleStatus.underAttack}`);
+		// debug.displayText(`attack: ${this.battleStatus.underAttack}`);
 
 		this.direction = (this.move.x > 0) ? "RIGHT" : "LEFT";
 
