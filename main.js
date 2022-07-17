@@ -33,8 +33,8 @@ function setup() {
 	createCanvas(D_WIDTH, D_HEIGHT);
 	sprites.setLayers(["MANAGER", "BACKGROUND", "LOWPARTICLE", "DEADRAT", "RAT", "HIGHPARTICLE", "FOREGROUND", "UI"]);
 
-	sprites.new(new RatParent(30, [400, 500], -1, genomePlayer));
-	sprites.new(new RatParent(5, [400, -400], 20, genomePlayer));
+	sprites.new(new RatParent(20, [400, 500], -1, genomePlayer));
+	sprites.new(new RatParent(20, [400, -400], 20, genomePlayer));
 	frameRate(50);
 
 	const b = assets.BACKGROUND_GRASS.width - 1;

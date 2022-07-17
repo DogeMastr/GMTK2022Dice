@@ -31,12 +31,12 @@ function impactFont (t, pos, stroke, textColour, strokeColour) {
 	strokeColour = strokeColour ?? color(10);
 	fill(strokeColour);
 
-	text(t, pos[0]-stroke, pos[1]-stroke);
-	text(t, pos[0]+stroke, pos[1]-stroke);
-	text(t, pos[0]+stroke, pos[1]+stroke);
-	text(t, pos[0]-stroke, pos[1]+stroke);
+	// text(t, pos[0]-stroke, pos[1]-stroke);
+	// text(t, pos[0]+stroke, pos[1]-stroke);
+	// text(t, pos[0]+stroke, pos[1]+stroke);
+	// text(t, pos[0]-stroke, pos[1]+stroke);
 
-	fill(textColour);
+	fill(10);
 	text(t, pos[0], pos[1]);
 
 }
@@ -86,6 +86,31 @@ class Coroutine extends Sprite {
 		if (this._frames < 1) {
 			(this._callback_args) ? this._callback(this._callback_args) : this._callback();
 			this.destroy = true;
+		}
+	}
+}
+
+
+class RepeaterCoroutine extends Sprite {
+	constructor(pos, frameLen, frameMod, callback) {
+		super();
+		new super.constructor();
+
+		this._frameLen = frameLen;
+		this._frameMod = frameMod;
+
+		this._callback = callback;
+	}
+
+	update() {
+		this._frameLen--;
+
+		if (this._frameLen < 1) {
+			this.kill();
+		}
+
+		if (this._frameLen % this._frameMod == 0) {
+			this._callback();
 		}
 	}
 }

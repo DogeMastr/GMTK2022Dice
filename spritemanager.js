@@ -7,6 +7,10 @@ class Sprite {
 	pos() {
 		return [this.x, this.y]
 	}
+
+	kill() {
+		this.destroy = true;
+	}
 }
 
 
